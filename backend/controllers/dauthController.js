@@ -12,9 +12,6 @@ export const redirectToDAuth = (req, res) => {
   const state = generateRandomString();
   const nonce = generateRandomString();
 
-  req.session.state = state;
-  req.session.nonce = nonce;
-
   const clientId = process.env.DAUTH_CLIENT_ID;
   const redirectUri = encodeURIComponent(process.env.DAUTH_REDIRECT_URI);
   const scope = encodeURIComponent('openid email profile user');
@@ -27,13 +24,6 @@ export const redirectToDAuth = (req, res) => {
 export const handleCallback = async (req, res) => {
   try {
     const { code, state } = req.query;
-
-    // console.log('Session stored state:', req.session.state);
-    // console.log('State received from DAuth:', state);
-
-    if (state !== req.session.state) {
-      return res.status(400).json({ error: 'Invalid state parameter' });
-    }
 
     const tokenResponse = await axios.post(
       `${DAUTH_BASE_URL}/api/oauth/token`,
