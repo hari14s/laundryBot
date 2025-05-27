@@ -3,6 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./utils/db.js";
 import dauthRoutes from './routes/dauthRoute.js';
+import serviceRoutes from './routes/serviceRoute.js';
+import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+
 
 dotenv.config();
 connectDB();
@@ -20,8 +24,10 @@ app.use(cors({
   credentials: true
 }));
 
-
 app.use('/auth/dauth', dauthRoutes);
+app.use('/services', serviceRoutes);
+app.use('/user', userRoutes);
+app.use('/order', orderRoutes); 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

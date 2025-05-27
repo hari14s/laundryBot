@@ -50,7 +50,7 @@ export const handleCallback = async (req, res) => {
     );
 
     const userData = userResponse.data;
-    //console.log(userData);
+    console.log(userData);
 
     const user = await User.findOneAndUpdate(
       { email: userData.email },
@@ -58,13 +58,12 @@ export const handleCallback = async (req, res) => {
         name: userData.name,
         email: userData.email,
         dauthId: userData.id,
-        profile: userData.profile || {},
       },
       { upsert: true, new: true }
     );
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email, name: user.name },
+      { id: user._id, email: user.email, name: user.name },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
@@ -77,7 +76,7 @@ export const handleCallback = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 1 day expiry
     });
 
-    res.redirect('http://localhost:5000'); 
+    res.redirect('http://localhost:5000/user/dashbord');
 
   } catch (error) {
     console.error('DAuth callback error:', error.response?.data || error.message);
